@@ -1,0 +1,787 @@
+==
+<?php
+function onStart()
+{
+    $this['hello'] = "Hello world!";
+    
+    $this['language'] = $this->param('language');
+    
+    // Get cURL resource
+    $curl = curl_init();
+    // Set some options - we are passing in a useragent too here
+    curl_setopt_array($curl, array(
+        CURLOPT_RETURNTRANSFER => 1,
+        CURLOPT_URL => 'http://www.timeapi.org/pst/now?\I:\M%20\p',
+        CURLOPT_USERAGENT => 'Codular Sample cURL Request'
+    ));
+    // Send the request & save response to $resp
+    $resp = curl_exec($curl);
+    // Close request to clear up some resources
+    curl_close($curl);
+    
+    $this['time'] = $resp;
+    
+    $curl = curl_init();
+    
+    // Set some options - we are passing in a useragent too here
+    curl_setopt_array($curl, array(
+        CURLOPT_RETURNTRANSFER => 1,
+        CURLOPT_URL => 'http://www.timeapi.org/pst/now?\b%20\d%20\Y',
+        CURLOPT_USERAGENT => 'Codular Sample cURL Request'
+    ));
+    // Send the request & save response to $resp
+    $resp = curl_exec($curl);
+    // Close request to clear up some resources
+    curl_close($curl);
+    
+    $this['date'] = $resp;
+    
+        $curl = curl_init();
+    
+    // Set some options - we are passing in a useragent too here
+    curl_setopt_array($curl, array(
+        CURLOPT_RETURNTRANSFER => 1,
+        CURLOPT_URL => 'http://content.guardianapis.com/search?q=united%20states&api-key=75ec8faa-598b-4a2f-80ac-54e0500835f9',
+        CURLOPT_USERAGENT => 'Codular Sample cURL Request'
+    ));
+    // Send the request & save response to $resp
+    $resp = curl_exec($curl);
+    // Close request to clear up some resources
+    curl_close($curl);
+    
+    $obj = json_decode($resp);
+    
+    /*foreach ($obj["response"] as $key => $value){
+        printf("%s<br>",$key);
+    }*/
+    
+    //var_dump(property_exists($obj, 'response'));
+    
+    $this['newsWebTitle0'] = $obj->response->results[0]->webTitle;
+    $this['newsUrl0'] = $obj->response->results[0]->webUrl;
+    $this['newsSectionName0'] = $obj->response->results[0]->sectionName;
+    
+    
+    $this['newsWebTitle1'] = $obj->response->results[1]->webTitle;
+    $this['newsUrl1'] = $obj->response->results[1]->webUrl;
+    $this['newsSectionName1'] = $obj->response->results[1]->sectionName;
+    
+    
+    $this['newsWebTitle2'] = $obj->response->results[2]->webTitle;
+    $this['newsUrl2'] = $obj->response->results[2]->webUrl;
+    $this['newsSectionName2'] = $obj->response->results[2]->sectionName;
+    
+     $curl = curl_init();
+    
+    // Set some options - we are passing in a useragent too here
+    curl_setopt_array($curl, array(
+        CURLOPT_RETURNTRANSFER => 1,
+        CURLOPT_URL => 'http://api.openweathermap.org/data/2.5/weather?q=Los%20Angeles&APPID=65f08241e3c285966c232c0576d882b0&units=imperial',
+        CURLOPT_USERAGENT => 'Codular Sample cURL Request'
+    ));
+    // Send the request & save response to $resp
+    $resp = curl_exec($curl);
+    // Close request to clear up some resources
+    curl_close($curl);
+    
+    $obj = json_decode($resp);
+    
+    
+    $this['temp'] = round($obj->main->temp);
+    
+    
+    
+}
+?>
+==
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>HomeOS</title>
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.2/moment.min.js"></script>
+        
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+        
+        <!-- jQuery library -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+        
+        {% framework %}
+        
+        <!-- Latest compiled JavaScript -->
+        <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+        
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flickity/1.1.2/flickity.css">
+        <!-- or -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flickity/1.1.2/flickity.min.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/flickity/1.1.2/flickity.pkgd.js"></script>
+        
+        
+        <!-- Include jQuery Mobile stylesheets -->
+        <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
+        
+        <!-- Include the jQuery Mobile library -->
+        <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+
+        
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+        
+        
+        <style>
+            
+            * {
+              -webkit-box-sizing: border-box;
+              box-sizing: border-box;
+            }
+            
+            body { font-family: sans-serif;
+            
+               
+                
+            }
+            
+            body::-webkit-scrollbar { width: 0 !important }
+            
+            .element { overflow: hidden; }
+            
+            .main{
+                
+                background-image: url("{{'/themes/demo/assets/images/appbackground.jpg'}}");
+                background-repeat: no-repeat;
+                //background-attachment: fixed;
+                min-height: 1000px;
+                min-width: 100%;
+            }
+            
+            #date{
+                
+                margin-top: 0px;
+                color: white;
+                margin-left: 10%;
+                font-size: 35px;
+            }
+            
+             #time{
+                
+                margin-top: 0px;
+                color: white;
+                margin-left: 4%;
+                font-size: 60px;
+            }
+            
+             #temp{
+                
+                margin-top: 0px;
+                margin-right: 10%;
+                color: white;
+                text-align: right;
+                font-size: 35px;
+            }
+            
+            h1{
+                text-decoration: none;
+                font-size: 500%;
+            }
+            
+            .gallery {
+              background: transparent;
+            }
+            
+            .ui-page.ui-page-theme-a.ui-page-active{
+                
+                background-color: transparent !important;
+                
+            }
+            
+            #events {
+                margin-left: 4%;
+                margin-right: 4%;
+                margin-top: 25px;
+                width: 92%;
+                background: rgba(0,0,0,0.1) ;
+                padding: 2px;
+                border-radius: 15px;
+            }
+
+                
+            .center {
+                margin: auto;
+                margin-top: 25px;
+                margin-bottom: 25px;
+                width: 96%;
+                //border: 1px solid #73AD21;
+                //border: 1px solid #e7d243;
+                //box-shadow: 3px 3px 5px rgba(255,255,0,0.3);
+                padding: 2px;
+                border-radius: 15px;
+            }
+            
+            span.subject{
+                color:#e7d243 !important;
+            }
+            
+            span.messageheader{
+                color:white;
+            }
+            
+            .events {
+                margin: auto;
+                width: 96%;
+                padding: 10px;
+            }
+            
+            .eventsummary{
+                 text-shadow: none;
+                 color: #e7d243;
+                 font-size: 25px;
+            }
+            
+            .eventstart{
+                 text-shadow: none;
+                 color: white;
+                 text-align: right;
+            }
+                
+            .event-cell{
+                
+            }
+            
+            .flickity-slider, .flickity-viewport, .gallery{
+                border-radius: 15px;
+            }
+            
+            .gallery-cell {
+              height: 150px;
+              width: 95%;
+              margin-right: 5px;
+              background: rgba(0,0,0,0.1) ;
+              counter-increment: gallery-cell;
+              //color: white;
+              text-shadow: none;
+              border-radius: 15px;
+              
+            }
+            
+            /* cell number */
+            .gallery-cell:before {
+              display: block;
+              text-align: center;
+              //line-height: 200px;
+              //font-size: 80px;
+              color: white;
+            }
+            
+            
+            #news{
+                margin: auto;
+                width: 94%;
+                padding: 2px;
+                border-radius: 15px;
+            }
+            .newsSectionName{
+                color: white;
+                text-shadow: none !important;
+            }
+            .newsWebTitle{
+                color:#e7d243 !important;
+                text-shadow: none !important;
+            }
+            .newsUrl{
+                color:#e7d243 !important;
+                text-shadow: none !important;
+            }
+
+            
+        </style>
+        
+        
+        
+            <script type="text/javascript">
+      // Your Client ID can be retrieved from your project in the Google
+      // Developer Console, https://console.developers.google.com
+      
+     // var clientId = ;
+      //var apiKey = 'AIzaSyD_vY2yaE_3nB1sZ-4hFEbBIuEOTM7QGLQ';      
+      
+      
+      var CLIENT_ID = '476219405288-1rdkg7fgrrboepn4bmf0ohl9cck5um9j.apps.googleusercontent.com';
+
+      var SCOPES = ["https://www.googleapis.com/auth/calendar","https://www.googleapis.com/auth/calendar.readonly", "https://www.googleapis.com/auth/gmail.compose", "https://www.googleapis.com/auth/gmail.insert", "https://www.googleapis.com/auth/gmail.labels", "https://www.googleapis.com/auth/gmail.modify", "https://www.googleapis.com/auth/gmail.readonly", "https://www.googleapis.com/auth/gmail.send"];
+
+      /**
+       * Check if current user has authorized this application.
+       */
+      function checkAuth() {
+        gapi.auth.authorize(
+          {
+            'client_id': CLIENT_ID,
+            'scope': SCOPES.join(' '),
+            'immediate': true
+          }, handleAuthResult);
+      }
+
+      /**
+       * Handle response from authorization server.
+       *
+       * @param {Object} authResult Authorization result.
+       */
+      function handleAuthResult(authResult) {
+        var authorizeDiv = document.getElementById('authorize-div');
+        if (authResult && !authResult.error) {
+          // Hide auth UI, then load client library.
+          authorizeDiv.style.display = 'none';
+          loadGmailApi();
+          loadCalendarApi();
+        } else {
+          // Show auth UI, allowing the user to initiate authorization by
+          // clicking authorize button.
+          authorizeDiv.style.display = 'inline';
+        }
+      }
+
+      /**
+       * Initiate auth flow in response to user clicking authorize button.
+       *
+       * @param {Event} event Button click event.
+       */
+      function handleAuthClick(event) {
+        gapi.auth.authorize(
+          {client_id: CLIENT_ID, scope: SCOPES, immediate: false},
+          handleAuthResult);
+        return false;
+      }
+
+      /**
+       * Load Gmail API client library. List labels once client library
+       * is loaded.
+       */
+      function loadGmailApi() {
+        gapi.client.load('gmail', 'v1', listMessages);
+      }
+      
+      /**
+       * Load Google Calendar client library. List upcoming events
+       * once client library is loaded.
+       */
+      function loadCalendarApi() {
+        gapi.client.load('calendar', 'v3', listUpcomingEvents);
+      }
+
+      function listUpcomingEvents() {
+          
+           
+          
+        var request = gapi.client.calendar.events.list({
+          'calendarId': 'primary',
+          'timeMin': (new Date()).toISOString(),
+          'showDeleted': false,
+          'singleEvents': true,
+          'maxResults': 3,
+          'orderBy': 'startTime'
+        });
+        
+          request.execute(function(resp) {
+              
+                  
+              
+          var events = resp.items;
+          appendPre('Upcoming events:');
+
+          if (events.length > 0) {
+              
+            for (i = 0; i < events.length; i++) {
+              var event = events[i];
+              var when = event.start.dateTime;
+              if (!when) {
+                when = event.start.date;
+              }
+
+              var newWhen = new Date(Date.parse(when)).toDateString()
+              
+              var startElem = document.getElementById("event-"+(i+1)+"-start");
+              startElem.innerHTML = newWhen;
+              
+              var summaryElem = document.getElementById("event-"+(i+1)+"-summary");
+              summaryElem.innerHTML = "<a href='"+event.htmlLink+"'>"+event.summary+'</a>';
+              
+              
+            }
+          } else {
+            //appendPre('No upcoming events found.');
+          }
+
+        });
+      }
+     
+
+	function getHeader(headers, index) {
+        var header = '';
+
+        $.each(headers, function(){
+          if(this.name === index){
+            header = this.value;
+          }
+        });
+        return header;
+      }
+      
+    var messages = [];  
+
+	function getMessage(userId, messageId,i) {
+  		var request = gapi.client.gmail.users.messages.get({
+    		'userId': userId,
+    		'id': messageId
+  	});
+  	request.execute(function(message) {displayMessage(message,i)});
+  	
+  	
+  	
+	}
+	
+	function getHTMLPart(arr) {
+        for(var x = 0; x <= arr.length; x++)
+        {
+          if(typeof arr[x].parts === 'undefined')
+          {
+            if(arr[x].mimeType === 'text/html')
+            {
+              return arr[x].body.data;
+            }
+          }
+          else
+          {
+            return getHTMLPart(arr[x].parts);
+          }
+        }
+        return '';
+      }
+	
+	function getBody(message) {
+        var encodedBody = '';
+        if(typeof message.parts === 'undefined')
+        {
+          encodedBody = message.body.data;
+        }
+        else
+        {
+          encodedBody = getHTMLPart(message.parts);
+        }
+        encodedBody = encodedBody.replace(/-/g, '+').replace(/_/g, '/').replace(/\s/g, '');
+        return decodeURIComponent(escape(window.atob(encodedBody)));
+      }
+
+	function displayMessage(message,i){
+
+        var msg = {id:"flickity-"+i, msg:getBody(message.payload)};
+            
+        messages.push(msg);
+
+
+        var date = getHeader(message.payload.headers,'Date');
+        var from = getHeader(message.payload.headers,'From');
+        var subject = getHeader(message.payload.headers,'Subject');
+        
+        msgDiv = document.getElementById("flickity-"+i);
+              
+        var msg = '<span class="messageheader">'+ date + '</span><br><span class="messageheader">' + from + '</span><br><br><span class="subject">' + subject + '</span>';
+        
+        msgDiv.innerHTML = msg
+              
+        //$( ".msgGallery" ).append( msg );
+
+	}
+ 
+      function listMessages() {
+        var request = gapi.client.gmail.users.messages.list({
+          'userId': 'me',
+          'labelIds': 'INBOX',
+          'maxResults': 10
+        });
+
+        request.execute(function(resp) {
+          var labels = resp.messages;
+          //appendPre('Labels:');
+
+          if (labels && labels.length > 0) {
+
+              
+            for (i = 0; i < labels.length; i++) {
+
+                
+                var label = labels[i];
+                
+		        getMessage('me',label.id,i)
+               
+              
+            }
+            
+            
+            
+          } else {
+            appendPre('No Labels found.');
+          }
+        });
+      }
+
+
+
+
+      /**
+       * Append a pre element to the body containing the given message
+       * as its text node.
+       *
+       * @param {string} message Text to be placed in pre element.
+       */
+      function appendPre(message) {
+        var pre = document.getElementById('output');
+        //var textContent = document.createTextNode(message + '\n');
+        //pre.appendChild(message);
+	    //pre.innerHTML += message 
+      }
+
+    </script>
+    <script src="https://apis.google.com/js/client.js?onload=checkAuth">
+    </script>
+    
+    
+    
+    <script>
+    
+    function getTemp(){
+        
+        //https://freegeoip.net/json
+        
+        //JSON.parse(text[, reviver])
+        
+        /*$.get("https://freegeoip.net/json", function(data){
+          alert("Data: " + data);
+        });*/
+        
+        jQuery.ajax( {
+          url: '//freegeoip.net/json/',
+          type: 'POST',
+          dataType: 'jsonp',
+          success: function(location) {
+              
+              //var city = encodeURI(location.city);
+               var city = encodeURI("Los Angeles");
+              
+              //var url = 'http://api.openweathermap.org/data/2.5/weather?q='+city+'&lat='+location.latitude+'&long='+location.longitude+'&APPID=65f08241e3c285966c232c0576d882b0&units=imperial'
+              
+              var url = "http://api.openweathermap.org/data/2.5/weather?q="+city+"&mode=json&units=imperial&APPID=65f08241e3c285966c232c0576d882b0"
+
+                $.getJSON(url).then(function(data) {
+                    
+                    var temp = Math.round(data["main"]["temp"]);
+                    
+                    var icon = "http://openweathermap.org/img/w/"+data["weather"][0]["icon"]+".png";
+                    
+                     var tempElem = document.getElementById('temp');
+                     
+                     tempElem.innerHTML = temp+"&#8457;<img src=\""+icon+"\">";
+
+                });
+              
+            // example where I update content on the page.
+            /*jQuery('#city').html(location.city);
+            jQuery('#region-code').html(location.region_code);
+            jQuery('#region-name').html(location.region_name);
+            jQuery('#areacode').html(location.areacode);
+            jQuery('#ip').html(location.ip);
+            jQuery('#zipcode').html(location.zipcode);
+            jQuery('#longitude').html(location.longitude);
+            jQuery('#latitude').html(location.latitude);
+            jQuery('#country-name').html(location.country_name);
+            jQuery('#country-code').html(location.country_code);*/
+          }
+        } );
+        
+        
+        
+        
+    }
+    
+    
+    $( document ).ready(function() {
+        
+        getTemp();
+        
+        $('body').on('click', 'button.closewindow', function() {
+             var msgdisplay = document.getElementById('msgdisplay');
+            $( "#msgdisplay" ).toggle();
+        });
+
+        update();
+
+        setInterval(update, 60000);
+        //setInterval(getTemp, 60000);
+        
+        $(".message").dblclick(function(){
+            
+            for(var i = 0; i < messages.length; i++){
+                
+               if(messages[i]["id"] == event.target.id || messages[i]["id"] == event.target.parentElement.id){
+                   
+                   
+                    var template = document.createElement('template');
+                    template.innerHTML = messages[i]["msg"];
+                    
+                    var body = template.content.firstChild;
+                   
+                   var text = $(body.innerHTML).text();
+                   
+                   //alert(messages[i]["msg"]);
+                   
+                   var msgdisplay = document.getElementById('msgdisplay');
+                   
+                   msgdisplay.innerHTML = "<div style=\"width:100%;text-align:right\"><button class=\"closewindow\" id=\"closewindow\">X</button></div>"+template.innerHTML;
+                   
+                   //$("#msgdisplay").show();
+                   
+                   $( "#msgdisplay" ).toggle();
+                   
+               }
+                
+                
+            }
+            
+        });
+
+        
+    });
+
+    var update = function () {
+        
+        var dateElem = document.getElementById('date');
+        var timeElem = document.getElementById('time');
+        
+        dateElem.innerHTML = moment().format("MMM D YYYY");
+        timeElem.innerHTML = moment().format('h:mm a');
+    };
+    
+    
+    </script>
+    
+    
+  </head>
+        
+        
+        
+    </head>
+    <body class="main">
+    
+    <!--<div id="ddd"></div>-->
+    
+     <div id="authorize-div" style="background-color:white;width:100%;height:100%;z-index:10;display:none; position: absolute; top: 0; left: 0;">
+      <span>Authorize access to HomeOS</span>
+      <!--Button for the user to click to initiate auth sequence -->
+      <button id="authorize-button" onclick="handleAuthClick(event)">
+        Authorize
+      </button>
+    </div>
+    <!--<div id="output"></div>-->
+    
+    <div id="msgdisplay" style="background-color:white;width:100%;height:100%;z-index:1;display:none; position: absolute; top: 0; left: 0;"></div>
+    
+    <div class="main" style="width:100%;height:100%;z-index:0;position: absolute; top: 0; left: 0;">   
+<!--<div style="width:90%" class="container-fluid">-->
+
+    <div id="time">{{time}}</div>
+    
+    <div class="row">
+
+        <div class="col-xs-6"><h3 id="date">{{date}}</h3></div>
+        <div class="col-xs-6"><h3 id="temp">&#8457;</h3></div>
+    </div>
+    
+    <div id="events">
+        <div class="row">
+            <div class="col-xs-6"><h2 class="ui-li-heading eventsummary" id="event-1-summary"></h2></div>
+            <div class="col-xs-6 eventstart"><strong class="eventstart" id="event-1-start"></strong></div>
+        </div>
+        <div class="row">
+            <div class="col-xs-6"><h2 class="ui-li-heading eventsummary" id="event-2-summary"></h2></div>
+            <div class="col-xs-6 eventstart"><strong class="eventstart" id="event-2-start"></strong></div>
+        </div>
+        <div class="row">
+            <div class="col-xs-6"><h2 class="ui-li-heading eventsummary" id="event-3-summary"></h2></div>
+            <div class="col-xs-6 eventstart"><strong class="eventstart" id="event-3-start"></strong></div>
+        </div>
+    </div>
+<!--
+        <ul data-role="listview" data-inset="true" class="events ui-listview ui-listview-inset ui-corner-all ui-shadow">
+        
+        <li data-role="list-divider" role="heading" class="ui-li ui-li-divider ui-bar-b ui-li-has-count ui-first-child">&nbsp;</li>
+        
+              <li data-corners="false" data-shadow="false" data-iconshadow="true" data-wrapperels="div" data-icon="arrow-r" data-iconpos="right" data-theme="c" class="ui-btn ui-btn-icon-right ui-li-has-arrow ui-li ui-btn-up-c">
+                  <div class="ui-btn-inner ui-li">
+                      <div class="ui-btn-text">
+                        <div class="ui-li-aside ui-li-desc"><strong id="event-1-start"></strong></div><br>
+            			<h2 class="ui-li-heading" id="event-1-summary"></h2>
+            			</div>
+                    </div>
+            </li>
+            
+          <li data-corners="false" data-shadow="false" data-iconshadow="true" data-wrapperels="div" data-icon="arrow-r" data-iconpos="right" data-theme="c" class="ui-btn ui-btn-icon-right ui-li-has-arrow ui-li ui-btn-up-c">
+                  <div class="ui-btn-inner ui-li">
+                      <div class="ui-btn-text">
+                        <div class="ui-li-aside ui-li-desc"><strong id="event-2-start"></strong></div><br>
+            			<h2 class="ui-li-heading" id="event-2-summary"></h2>
+            			</div>
+                    </div>
+            </li>
+            
+          <li data-corners="false" data-shadow="false" data-iconshadow="true" data-wrapperels="div" data-icon="arrow-r" data-iconpos="right" data-theme="c" class="ui-btn ui-btn-icon-right ui-li-has-arrow ui-li ui-btn-up-c">
+                  <div class="ui-btn-inner ui-li">
+                      <div class="ui-btn-text">
+                        <div class="ui-li-aside ui-li-desc"><strong id="event-3-start"></strong></div><br>
+            			<h2 class="ui-li-heading" id="event-3-summary"></h2>
+            			</div>
+                    </div>
+            </li>
+
+	</ul>
+	
+	-->
+	
+	<div id="msgParent" class="row center">
+
+        <div id="msGallery" class="gallery js-flickity center"
+          data-flickity-options='{ "freeScroll": false, "autoplay": true, "contain": true, "prevNextButtons": false, "pageDots": false }'>
+
+             <div id="flickity-0" class="gallery-cell message"></div>
+             <div id="flickity-1" class="gallery-cell message"></div>
+             <div id="flickity-2" class="gallery-cell message"></div>
+             <div id="flickity-3" class="gallery-cell message"></div>
+             <div id="flickity-4" class="gallery-cell message"></div>
+             <div id="flickity-5" class="gallery-cell message"></div>
+             <div id="flickity-6" class="gallery-cell message"></div>
+             <div id="flickity-7" class="gallery-cell message"></div>
+             <div id="flickity-8" class="gallery-cell message"></div>
+             <div id="flickity-9" class="gallery-cell message"></div>
+
+        </div>
+        
+    </div>
+
+        <div id="news">
+            <div class="newsSectionName">{{newsSectionName0}}</div>
+            <div class="newsWebTitle"><a href="{{newsUrl0}}">{{newsWebTitle0}}</a></div>
+            <div class="newsUrl">{{newsUrl0}}</div>
+            <br>
+            <div class="newsSectionName">{{newsSectionName1}}</div>
+            <div class="newsWebTitle"><a href="{{newsUrl1}}">{{newsWebTitle1}}</a></div>
+            <div class="newsUrl">{{newsUrl1}}</div>
+            <br>
+            <div class="newsSectionName">{{newsSectionName2}}</div>
+            <div class="newsWebTitle"><a href="{{newsUrl2}}">{{newsWebTitle2}}</a></div>
+            <div class="newsUrl">{{newsUrl2}}</div>
+            <br>
+        </div>
+        
+     
+    </div>     
+
+    </body>
+</html>
